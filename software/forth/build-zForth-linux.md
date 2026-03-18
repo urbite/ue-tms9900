@@ -141,7 +141,6 @@ Build locally from `~/tms9900-gcc/Dockerfile` instead:
 ```bash
 cd ~/tms9900-gcc
 docker build -t bkuker/tms9900-gcc:local .
-docker tag bkuker/tms9900-gcc:local bkuker/tms9900-gcc:latest
 ```
 
 This takes ~15 minutes — it compiles GCC 4.4.0 + binutils 2.19.1 from source inside Alpine.
@@ -152,6 +151,19 @@ The Dockerfile uses gcc patch 1.32 and binutils patch 1.11 (committed 2026-03-16
 - 2026-03-13: bkuker built the reference ROM (with newer local patches)
 - 2026-03-16: bkuker committed updated patches to tms9900-gcc repo
 The Hub image predates the patch updates. Local build = correct. Hub = wrong binary.
+
+**IMPORTANT — always use `:local` tag explicitly:**
+`make.sh` references `bkuker/tms9900-gcc:local` directly. Do NOT tag it as `:latest` or
+run `docker pull bkuker/tms9900-gcc` — either can silently replace the correct image with
+the Hub version, causing `Enw` boot errors that are hard to diagnose. The symptom is
+`forth.rom` compiling to ~7140 bytes instead of ~6984 bytes.
+
+To verify you have the right image:
+```bash
+docker images bkuker/tms9900-gcc
+```
+The `:local` image should be ~65.5MB (content size ~19.9MB). The Hub image is ~59.2MB.
+If `:local` is missing, rebuild from `~/tms9900-gcc/Dockerfile`.
 
 ### 4. Install xdt99 (TMS9900 assembler)
 
@@ -262,6 +274,9 @@ Then launch with `./mame_pico` as normal.
 - `out.romz` and `out.z` in the repo are stale build artifacts from an older source revision.
 - `docs/forthBoot.rom` is the authoritative reference ROM (served to the web emulator).
 - bkuker's Docker image tag is `bkuker/tms9900-gcc` — NOT `cmcureau/tms9900-gcc` (older, broken).
+- `make.sh` uses `bkuker/tms9900-gcc:local` explicitly. Never retag `:local` as `:latest` or pull
+  from Docker Hub — the Hub image silently produces a wrong binary (~7140 bytes vs ~6984 bytes)
+  that boots with `Enw` errors. This bit us multiple times (2026-03-18).
 - xdt99 and pyZX0 paths in `build.bat` are `../../../` relative to `software/forth/` = repo parent (~/).
   On Linux we use system-installed tools so paths don't matter.
 - The `echo ... | sudo tee` trick for writing to `/etc/apt/` fails on Ubuntu because the shell
