@@ -179,18 +179,7 @@ Verify: `zx0` → prints usage with version `ZX0 v2.2`
 **Note:** The repo's `Makefile` calls `owcc` (OpenWatcom, Windows-only) and will fail on Linux.
 Ignore it and use the gcc line above.
 
-### 6. Set up GitHub SSH key
-
-Required for cloning from GitHub over SSH:
-```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-cat ~/.ssh/id_ed25519.pub   # copy this to GitHub → Settings → SSH keys
-```
-
-**Note:** GitHub no longer allows HTTPS cloning with username/password.
-Public repos can be cloned over HTTPS anonymously but rate limiting applies to API calls.
-
-### 7. Write bash build scripts
+### 6. Write bash build scripts
 
 These live in `~/ue-tms9900/software/forth/` on the `linux-build` branch:
 
@@ -224,7 +213,7 @@ ls -l forthBoot.rom forthBoot.lst
 chmod +x make.sh build.sh
 ```
 
-### 8. Install ROM into MAME
+### 7. Install ROM into MAME
 
 ```bash
 cd ~/mame
