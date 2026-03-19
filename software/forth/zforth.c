@@ -750,12 +750,8 @@ static void do_prim(zf_ctx *ctx, zf_prim op, const char *input)
 			break;
 
 		case PRIM_KEY:
-			/* Get next character from input stream */
-			if(input == NULL) {
-				ctx->input_state = ZF_INPUT_PASS_CHAR;
-			} else {
-				zf_push(ctx, input[0]);
-			}
+			/* Get next character from input stream — blocking via host syscall */
+			zf_host_sys(ctx, ZF_SYSCALL_KEY, NULL);
 			break;
 
 		case PRIM_LITS:

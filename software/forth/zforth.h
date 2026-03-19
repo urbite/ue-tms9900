@@ -34,13 +34,14 @@ typedef enum {
 typedef enum {
 	ZF_INPUT_INTERPRET,
 	ZF_INPUT_PASS_CHAR,
-	ZF_INPUT_PASS_WORD
+	ZF_INPUT_PASS_WORD,
 } zf_input_state;
 
 typedef enum {
 	ZF_SYSCALL_EMIT,
 	ZF_SYSCALL_PRINT,
 	ZF_SYSCALL_TELL,
+	ZF_SYSCALL_KEY,
 	ZF_SYSCALL_USER = 128
 } zf_syscall_id;
 
@@ -64,7 +65,7 @@ typedef struct {
 	uint8_t dict[ZF_DICT_SIZE];
 
 	/* State and stack and interpreter pointers */
-	zf_input_state input_state;
+	volatile zf_input_state input_state;
 	int ip;
 
 	/* setjmp env for handling aborts */

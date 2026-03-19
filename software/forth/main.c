@@ -17,8 +17,8 @@ static void putchar(zf_ctx *ctx, char c)
 static char getchar(zf_ctx *ctx){
 	while (*ctx->stat & 0x02)
 		yield;
-	*ctx->stat = *ctx->mux;    
 	char in = *(ctx->mux+1);
+	*ctx->stat = *ctx->mux;
 	*(ctx->mux+3) = 0;
 	return in;
 }
@@ -68,6 +68,10 @@ zf_input_state zf_host_sys(zf_ctx *ctx, zf_syscall_id id, const char *input)
 			while ( len-- ){
 				putchar(ctx, *(ctx->dict + addr++) );
 			}
+			break;
+
+		case ZF_SYSCALL_KEY:
+			zf_push(ctx, (zf_cell)getchar(ctx));
 			break;
 	}
 
@@ -142,7 +146,6 @@ void main(unsigned short *mux, unsigned short *stat){
 		} else if(l < sizeof(buf)-1) {
 			buf[l++] = c;
 		}
-
 		buf[l] = '\0';
 	}
 }
