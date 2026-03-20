@@ -252,6 +252,18 @@ Then launch with `./mame_pico` as normal.
 - Root cause of earlier `Enw` error: Docker Hub image (pushed 2026-02-02) produces slightly
   different compiled binary than bkuker's local image; local build from Dockerfile fixes it
 
+**Runtime: WORKING** (2026-03-19, linux-build HEAD — after removing 4 unimplemented syscall words)
+- Clean boot: `zForth.` with no errors
+- Dictionary free after boot: **812 bytes** (762 + ~50 bytes recovered by removing sin/include/save/quit words)
+- `forth.rom`: 6908 bytes → `forth.romz`: 3663 bytes → `forthBoot.rom`: 4035 bytes (61 bytes spare)
+- `key` and `( comment )` verified working
+
+**Runtime: WORKING** (2026-03-19, linux-build HEAD — key echo suppression fix merged from bugfix/suppress-key-echo)
+- `key` word now uses blocking syscall (ZF_SYSCALL_KEY=3) instead of PASS_KEY state machine
+- Fixed stale M0STATC cache in `getchar()`: stat refresh now happens after RX data read (post-RDAV)
+- Interactive `key`-driven words (e.g. cursor movement loops) verified working end-to-end
+- `forth.rom`: 6998 bytes → `forth.romz`: 3709 bytes → `forthBoot.rom`: 4081 bytes (15 bytes spare)
+
 ---
 
 ## Completed Checklist
@@ -264,6 +276,7 @@ Then launch with `./mame_pico` as normal.
 - [x] Test full pipeline: Docker compile → ZX0 compress → xas99 assemble
 - [x] Install ROM and verify clean boot: `zForth.` / 762 bytes free
 - [x] Commit scripts to linux-build branch, push to fork
+- [x] Fix `key` echo suppression: blocking ZF_SYSCALL_KEY + getchar stat cache order (merged from bugfix/suppress-key-echo)
 
 ---
 
