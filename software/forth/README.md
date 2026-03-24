@@ -93,6 +93,24 @@ Timer frequency confirmed at exactly 145.00 Hz via MAME Lua emulated-time measur
 
 ---
 
+## Runtime State (linux-build HEAD, 2026-03-24)
+
+| Metric | Value |
+|--------|-------|
+| Dict free after clean boot | **801 bytes** |
+| ROM size (`forthBoot.rom`) | **4096 / 4096 bytes** (0 spare) |
+| Timer interrupt rate | 145.00 Hz (confirmed via MAME emulated-time measurement) |
+| TIMER_TICK address | `>3FF2` = 16370 |
+
+**Interactive dict budget:** loading words at the REPL consumes dict space from the 801
+bytes available at boot. Use `here .` and subtract from 2048 to check remaining space,
+or define `: free 2048 here - ;` as a convenience word.
+
+Example: `brline` with its dependencies (`.n`, `cXY`, `_B` scratch block) consumes
+431 bytes, leaving 370 bytes free.
+
+---
+
 ## Removals
 
 **Unimplemented syscall words removed from `core.zf`:**

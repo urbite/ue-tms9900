@@ -264,6 +264,13 @@ Then launch with `./mame_pico` as normal.
 - Interactive `key`-driven words (e.g. cursor movement loops) verified working end-to-end
 - `forth.rom`: 6998 bytes → `forth.romz`: 3709 bytes → `forthBoot.rom`: 4081 bytes (15 bytes spare)
 
+**Runtime: WORKING** (2026-03-24, linux-build HEAD — hw@@ and TIMER_TICK features merged)
+- `hw@@` word: 16-bit peek at any TMS9900 CPU address (syscall 4)
+- `TIMER_TICK` at >3FF2: incremented on every hardware timer interrupt (confirmed 145.00 Hz)
+- Separate yield vector at >0004; hardware timer vector at >0010 no longer shared with yield
+- Dictionary free after boot: **801 bytes** (812 − 11 bytes for `hw@@` word definition)
+- `forth.rom`: 7005 bytes → `forth.romz`: 3716 bytes → `forthBoot.rom`: 4096 bytes (0 bytes spare)
+
 ---
 
 ## Completed Checklist
