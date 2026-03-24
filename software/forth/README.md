@@ -93,6 +93,27 @@ Timer frequency confirmed at exactly 145.00 Hz via MAME Lua emulated-time measur
 
 ---
 
+## Running the TypeScript Emulator Locally
+
+After building `forthBoot.rom`, the Vite dev server needs it in `web/public/`:
+
+```bash
+# One-time setup: symlink so the dev server always serves the latest build
+ln -sf $(pwd)/forthBoot.rom ../../../web/public/forthBoot.rom
+ln -sf $(pwd)/forthBoot.lst ../../../web/public/forthBoot.lst
+```
+
+Then start the dev server:
+```bash
+cd ~/ue-tms9900/web
+npm run dev        # → http://localhost:5173/
+```
+
+Note: `vite build` (GitHub Pages / `docs/`) needs a real copy, not a symlink —
+copy manually after each `build.sh` run, or the production deploy will be stale.
+
+---
+
 ## Runtime State (linux-build HEAD, 2026-03-24)
 
 | Metric | Value |
