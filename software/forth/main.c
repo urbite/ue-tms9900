@@ -73,6 +73,11 @@ zf_input_state zf_host_sys(zf_ctx *ctx, zf_syscall_id id, const char *input)
 		case ZF_SYSCALL_KEY:
 			zf_push(ctx, (zf_cell)getchar(ctx));
 			break;
+
+		case ZF_SYSCALL_HWPEEK:
+			addr = zf_pop(ctx);
+			zf_push(ctx, *(volatile unsigned short *)(unsigned short)addr);
+			break;
 	}
 
 	return 0;

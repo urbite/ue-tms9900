@@ -42,6 +42,7 @@ typedef enum {
 	ZF_SYSCALL_PRINT,
 	ZF_SYSCALL_TELL,
 	ZF_SYSCALL_KEY,
+	ZF_SYSCALL_HWPEEK,
 	ZF_SYSCALL_USER = 128
 } zf_syscall_id;
 
