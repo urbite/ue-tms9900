@@ -28,12 +28,17 @@ TCUR    BSS 2                           ; Pointer to TCB for current task
 
 M0STATC BSS 2
 M1STATC BSS 2
+TIMER_TICK BSS 2                        ; Incremented on each hardware timer interrupt (not yield)
 
 ;*************************************************
 ;                       ROM Start
         AORG >0000                      ; Reset Vector...
         DATA OSWP                       ;       OS workspace addr
         DATA UNZIP                      ;       Init code
+
+YIELDV  AORG >4                         ; Yield Vector (BLWP @>0004 from C yield macro)
+        DATA OSWP                       ;       OS Workspace (shared with timer ISR)
+        DATA ISR_YIELD                  ;       Skips timer-only counter increment
 
 M0IRQV  AORG M0IRQ * 4
         DATA OSWP
@@ -100,6 +105,11 @@ INIT_STACKS
 ISR_TIMER
         LIMI 0                          ; INT OFF
         CLR @TMRRST                     ; MMIO Write to clear timer interrupt
+        INC @TIMER_TICK                 ; Count hardware timer ticks (not yield)
+                                        ; fall through to ISR_YIELD
+
+ISR_YIELD                               ; Entry for BLWP @>0004 (yield from C getchar/putchar)
+        LIMI 0                          ; INT OFF - interrupts may be on at yield point
 
         MOV @TCUR, R0                   ;Load current TCB address to R0
         MOV R0, R1                      ;Copy to R1...

@@ -1,6 +1,6 @@
 #include "zforth.h"
 
-#define yield __asm__("BLWP @>10")
+#define yield __asm__("BLWP @>4")       /* yield vector at >0004; >0010 is timer HW interrupt only */
 
 extern char coreZF[];
 
