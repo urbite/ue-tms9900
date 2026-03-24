@@ -11,3 +11,7 @@ dist/
 *.map
 *.s
 !/docs/**
+!/web/public/**
+# forthBoot is a build artifact — kept as local symlinks in web/public, not committed
+web/public/forthBoot.rom
+web/public/forthBoot.lst
