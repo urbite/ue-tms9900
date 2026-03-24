@@ -1,5 +1,9 @@
 # UE TMS-9900 Homebrew Emulator
 
+> **Fork changes:** This repo includes bug fixes and new features to bkuker's original
+> zForth boot ROM. See [`software/forth/README.md`](software/forth/README.md) for the
+> full list of changes.
+
 A quick and dirty emulator for [Usagi Electric](https://www.youtube.com/@UsagiElectric)'s
 homebrew computer using the TI-TMS9900 cpu.
 
