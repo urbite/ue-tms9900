@@ -5,12 +5,11 @@ OBJCOPY = tms9900-objcopy
 OBJDUMP = tms9900-objdump
 
 # Flags
-CFLAGS  = -ffreestanding -fno-builtin -Os -fomit-frame-pointer -Iinclude
+CFLAGS  = -ffreestanding -fno-builtin -Os -fomit-frame-pointer -g -Iinclude
 ASFLAGS = 
 LDFLAGS = -nostdlib -nostartfiles -T link.ld -Wl,-Map=forth.map
 
-# Targets
-all: forth.rom main.s forth.lst
+all: forth.rom main.s forth.lst main.lst zforth.lst
 
 # Link
 forth.elf: crt0.o main.o zforth.o include/lib_c.o include/lib_a.o link.ld Makefile
@@ -20,9 +19,16 @@ forth.elf: crt0.o main.o zforth.o include/lib_c.o include/lib_a.o link.ld Makefi
 forth.rom: forth.elf Makefile
 	$(OBJCOPY) -O binary $< $@
 
-# Disassembly
+# Disassembly: final linked addresses from ELF, source annotations from .o files
 forth.lst: forth.elf Makefile
 	$(OBJDUMP) -D $< > $@
+
+# Source-annotated listings from object files (relative addresses, but readable)
+main.lst: main.o Makefile
+	$(OBJDUMP) -S $< > $@
+
+zforth.lst: zforth.o Makefile
+	$(OBJDUMP) -S $< > $@
 
 # Startup assembly
 crt0.o: crt0.a99 Makefile
